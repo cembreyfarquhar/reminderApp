@@ -5,15 +5,40 @@ import styled from "styled-components";
 const StyledApp = styled.div`
   box-sizing: border-box;
   height: 100vh;
+  font-size: 10px;
 `;
 
-const StyledHomeScreen = styled.div`
+const StyledHomePage = styled.div`
   display: grid;
   height: 100%;
-  grid-template-columns: 10% auto 10%;
+  grid-template-columns: 15% auto 15%;
   grid-template-rows: 16% 12% 12% 12% 12% 12% 12% 12%;
+  grid-template-areas:
+    "header header header"
+    ". reminder ."
+    ". reminder ."
+    ". reminder ."
+    ". reminder ."
+    ". reminder ."
+    ". reminder ."
+    ". reminder .";
+    background-color: #EEEEEE;
 `;
 
+const StyledHeader = styled.div`
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  display: flex;
+  align-items: center;
+  h1 {
+    font-size: 3rem;
+  }
+`;
+
+const StyledReminder = styled.div`
+  font-size: 2rem;
+  grid-column: 2 / 3;
+`;
 
 class App extends Component {
   state = {
@@ -22,9 +47,18 @@ class App extends Component {
   render() {
     return (
       <StyledApp>
-        <StyledHomeScreen>
-          Reminders
-        </StyledHomeScreen>
+        <StyledHomePage>
+          <StyledHeader>
+            <h1>Reminders</h1>
+          </StyledHeader>
+          <StyledReminder>Hey</StyledReminder>
+          <StyledReminder>Do</StyledReminder>
+          <StyledReminder>The</StyledReminder>
+          <StyledReminder>Thing</StyledReminder>
+          <StyledReminder>Right</StyledReminder>
+          <StyledReminder>Frikkin</StyledReminder>
+          <StyledReminder>Now</StyledReminder>
+        </StyledHomePage>
       </StyledApp>
     );
   }
