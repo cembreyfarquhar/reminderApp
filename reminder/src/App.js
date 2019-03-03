@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import styled from "styled-components";
+import RemindersContainer from "./components/home-screen/reminders/RemindersContainer.js";
 
 const StyledApp = styled.div`
   box-sizing: border-box;
@@ -12,17 +13,10 @@ const StyledHomePage = styled.div`
   display: grid;
   height: 100%;
   grid-template-columns: 15% auto 15%;
-  grid-template-rows: 16% 12% 12% 12% 12% 12% 12% 12%;
+  grid-template-rows: 16% 84%;
   grid-template-areas:
     "header header header"
-    ". reminder ."
-    ". reminder ."
-    ". reminder ."
-    ". reminder ."
-    ". reminder ."
-    ". reminder ."
-    ". reminder .";
-    background-color: #EEEEEE;
+    "reminders";
 `;
 
 const StyledHeader = styled.div`
@@ -35,15 +29,25 @@ const StyledHeader = styled.div`
   }
 `;
 
-const StyledReminder = styled.div`
-  font-size: 2rem;
-  grid-column: 2 / 3;
-`;
-
 class App extends Component {
   state = {
-    reminders: []
+    reminders: [
+      {
+        id: 0,
+        text: "Turn in attendance!"
+      }
+    ]
   };
+
+  submitReminder = (e, reminder) => {
+    e.preventDefault();
+    this.setState(prevState => {
+      return {
+        reminders: [...prevState.reminders, reminder]
+      };
+    });
+  };
+
   render() {
     return (
       <StyledApp>
@@ -51,13 +55,7 @@ class App extends Component {
           <StyledHeader>
             <h1>Reminders</h1>
           </StyledHeader>
-          <StyledReminder>Hey</StyledReminder>
-          <StyledReminder>Do</StyledReminder>
-          <StyledReminder>The</StyledReminder>
-          <StyledReminder>Thing</StyledReminder>
-          <StyledReminder>Right</StyledReminder>
-          <StyledReminder>Frikkin</StyledReminder>
-          <StyledReminder>Now</StyledReminder>
+          <RemindersContainer reminders={this.state.reminders} submitReminder={this.submitReminder}/>
         </StyledHomePage>
       </StyledApp>
     );
