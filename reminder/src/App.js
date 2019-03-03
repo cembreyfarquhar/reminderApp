@@ -1,26 +1,31 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import styled from "styled-components";
+
+const StyledApp = styled.div`
+  box-sizing: border-box;
+  height: 100vh;
+`;
+
+const StyledHomeScreen = styled.div`
+  display: grid;
+  height: 100%;
+  grid-template-columns: 10% auto 10%;
+  grid-template-rows: 16% 12% 12% 12% 12% 12% 12% 12%;
+`;
+
 
 class App extends Component {
+  state = {
+    reminders: []
+  };
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <StyledApp>
+        <StyledHomeScreen>
+          Reminders
+        </StyledHomeScreen>
+      </StyledApp>
     );
   }
 }
