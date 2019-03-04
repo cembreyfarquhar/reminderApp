@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
+import { Route, withRouter } from "react-router-dom";
 import styled from "styled-components";
-import RemindersContainer from "./components/home-screen/reminders/RemindersContainer.js";
+import HomePage from "./components/home-screen/HomePage.js";
+import AddReminderForm from "./components/home-screen/reminders/forms/AddReminderForm.js";
 
 const StyledApp = styled.div`
   box-sizing: border-box;
@@ -9,54 +11,38 @@ const StyledApp = styled.div`
   font-size: 10px;
 `;
 
-const StyledHomePage = styled.div`
-  display: grid;
-  height: 100%;
-  grid-template-columns: 15% auto 15%;
-  grid-template-rows: 16% 84%;
-  grid-template-areas:
-    "header header header"
-    "reminders";
-`;
-
-const StyledHeader = styled.div`
-  grid-column: 2 / 3;
-  grid-row: 1 / 2;
-  display: flex;
-  align-items: center;
-  h1 {
-    font-size: 3rem;
-  }
-`;
-
 class App extends Component {
   state = {
     reminders: [
       {
-        id: 0,
-        text: "Turn in attendance!"
+        memo: "Turn in attendance!",
       }
     ]
   };
 
-  submitReminder = (e, reminder) => {
-    e.preventDefault();
-    this.setState(prevState => {
-      return {
-        reminders: [...prevState.reminders, reminder]
-      };
-    });
+  submitReminder = reminder => {
+    this.setState(prevState => ({
+      reminders: [...prevState.reminders, reminder]
+    }));
   };
 
   render() {
     return (
       <StyledApp>
-        <StyledHomePage>
-          <StyledHeader>
-            <h1>Reminders</h1>
-          </StyledHeader>
-          <RemindersContainer reminders={this.state.reminders} submitReminder={this.submitReminder}/>
-        </StyledHomePage>
+        <Route
+          exact
+          path="/"
+          render={props => (
+            <HomePage {...props} reminders={this.state.reminders} />
+          )}
+        />
+        <Route
+          exact={true}
+          path="/add-reminder-form"
+          render={props => (
+            <AddReminderForm {...props} submitReminder={this.submitReminder} />
+          )}
+        />
       </StyledApp>
     );
   }

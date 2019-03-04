@@ -9,11 +9,11 @@ const StyledRemindersContainer = styled.div`
   grid-template-rows: repeat(8, auto [reminder]);
 `;
 
-const RemindersContainer = ({ reminders, submitReminder }) => {
+const RemindersContainer = ({ reminders }) => {
   return (
     <StyledRemindersContainer>
       {reminders.map(reminder => {
-        return <Reminder reminder={reminder} submitReminder={submitReminder} />;
+        return <Reminder reminder={reminder} />;
       })}
     </StyledRemindersContainer>
   );
