@@ -5,12 +5,24 @@ const StyledForm = styled.form`
   display: grid;
   width: 100vw;
   height: 100vh;
-  grid-template-columns: 15% auto 20%;
-  grid-template-rows: 1fr 0.25fr 2fr 0.25fr 1.5fr 0.25fr 1.5fr 0.25fr 1.5fr 1fr;
+  grid-template-columns: 15% 32.5% 32.5% 20%;
+  grid-template-rows: 1fr 0.25fr .5fr 0.25fr 5fr 0.25fr 1.5fr 0.25fr 1.5fr 1fr;
   font-size: 1.4rem;
   h1 {
-    grid-column: 2 / 3;
+    grid-column: 2 / 4;
     align-self: end;
+    font-size: 2rem;
+  }
+  img {
+    width: 50px;
+  }
+  img:nth-of-type(1) {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+  }
+  img:nth-of-type(2) {
+    grid-column: 3 / 4;
+    grid-row: 3 / 4;
   }
   button {
     all: unset;
@@ -18,11 +30,40 @@ const StyledForm = styled.form`
     font-size: 2rem;
     text-align: left;
   }
-  span {
+  span:nth-of-type(1) {
     grid-column: 2 / 3;
   }
-  input {
+  span:nth-of-type(2) {
+    grid-column: 3 / 4;
+  }
+  span:nth-of-type(3) {
     grid-column: 2 / 3;
+    text-align: right;
+  }
+  span:nth-of-type(4) {
+    grid-column: 2 / 3;
+    text-align: right;
+  }
+  textarea {
+    grid-column: 1 / 5;
+    font-size: 2rem;
+  }
+  input[type="checkbox"] {
+    grid-column: 2 / 3;
+  }
+  input[type="date"],
+  input[type="time"] {
+    width: 35%;
+    height: 35%;
+    opacity: 0;
+  }
+  input[type="date"] {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+  }
+  input[type="time"] {
+    grid-column: 3 / 4;
+    grid-row: 3 / 4;
   }
 `;
 
@@ -44,7 +85,7 @@ class AddReminderForm extends Component {
     ev.persist();
     this.setState(prevState => ({
       reminder: {
-        memo: ev.target.value
+        [ev.target.name]: ev.target.value
       }
     }));
   };
@@ -53,29 +94,33 @@ class AddReminderForm extends Component {
     e.preventDefault();
     this.props.submitReminder(this.state.reminder);
     this.props.history.push("/");
-  }
+  };
   render() {
     return (
       <StyledForm>
         <h1>Add a Reminder</h1>
-        <button
-          onClick={this.submitReminder}
-        >
-          Save
-        </button>
+        <button onClick={this.submitReminder}>Save</button>
+        <span>Date</span>
+        <span>Time</span>
+        <img
+          src="https://cdn3.iconfinder.com/data/icons/pictofoundry-pro-vector-set/512/Calendar-512.png"
+          alt="calendar icon"
+        />
+        <input type="date" name="date" min="2019-03-04" />
+        <img
+          src="https://www.fjordsafari.com/wp-content/uploads/2016/11/round-clock-icon-86811.png"
+          alt="clock icon"
+        />
+        <input type="time" name="time" />
         <span>Memo</span>
-        <input
+        <textarea
           type="text"
           onChange={this.handleInput}
-          name="text"
+          name="memo"
           value={this.state.reminder.memo}
         />
-        <span>Date</span>
-        <input />
-        <span>Time</span>
-        <input />
         <span>Recurring?</span>
-        <input />
+        <input type="checkbox"/>
       </StyledForm>
     );
   }

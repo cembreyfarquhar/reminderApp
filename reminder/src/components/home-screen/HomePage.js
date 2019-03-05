@@ -15,12 +15,17 @@ const StyledHomePage = styled.div`
 const StyledHeader = styled.div`
   grid-column: 2 / 3;
   grid-row: 1 / 2;
-  display: flex;
   align-items: center;
   h1 {
     font-size: 3rem;
   }
 `;
+
+// const StyledHorizontalLine = styled.hr`
+//   grid-column: 1 / 4;
+//   grid-row: 2;
+//   width: 100%;
+// `;
 
 const HomePage = ({ reminders }) => {
   return (

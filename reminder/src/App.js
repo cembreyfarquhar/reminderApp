@@ -16,6 +16,7 @@ class App extends Component {
     reminders: [
       {
         memo: "Turn in attendance!",
+        time: "17:52:30"
       }
     ]
   };
@@ -26,12 +27,33 @@ class App extends Component {
     }));
   };
 
+  play = () => {
+    const sound = new Audio("http://streaming.tdiradio.com:8000/house.mp3");
+    sound.play();
+    alert(this.state.reminders[0].memo);
+    sound.pause();
+    sound.currentTime= 0;
+  };
+
+  alarm = () => {
+    setInterval(() => {
+      const date =
+        new Date().getHours().toString() +
+        ":" +
+        new Date().getMinutes().toString() +
+        ":" +
+        new Date().getSeconds().toString();
+      date === this.state.reminders[0].time ? this.play() : console.log(date);
+    }, 1000);
+  };
+
   render() {
+    // this.alarm();
     return (
       <StyledApp>
         <Route
           exact
-          path="/"
+          path="/" 
           render={props => (
             <HomePage {...props} reminders={this.state.reminders} />
           )}
