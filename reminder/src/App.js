@@ -28,25 +28,39 @@ class App extends Component {
     }));
   };
 
-  play = () => {
-    const sound = new Audio("http://streaming.tdiradio.com:8000/house.mp3");
-    sound.play();
-    alert(this.state.reminders[0].memo);
-    sound.pause();
-    sound.currentTime= 0;
-  };
+  // play = () => {
+  //   const sound = new Audio("http://streaming.tdiradio.com:8000/house.mp3");
+  //   sound.play();
+  //   alert(this.state.reminders[0].memo);
+  //   sound.pause();
+  //   sound.currentTime= 0;
+  // };
 
-  alarm = () => {
+  // alarm = () => {
+  //   setInterval(() => {
+  //     const date =
+  //       new Date().getHours().toString() +
+  //       ":" +
+  //       new Date().getMinutes().toString() +
+  //       ":" +
+  //       new Date().getSeconds().toString();
+  //     date === this.state.reminders[0].time ? this.play() : console.log(date);
+  //   }, 1000);
+  // };
+
+  // START HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  listenForReminders = () => {
+    const triggeredEvent = this.state.reminders.filter(reminder => {
+      return reminder.time === 2;
+    })
+  }
+
+  // On mounting, listens for reminders every minute
+  componentDidMount() {
     setInterval(() => {
-      const date =
-        new Date().getHours().toString() +
-        ":" +
-        new Date().getMinutes().toString() +
-        ":" +
-        new Date().getSeconds().toString();
-      date === this.state.reminders[0].time ? this.play() : console.log(date);
-    }, 1000);
-  };
+      this.listenForReminders();
+    }, 60000);
+  }
 
   render() {
     // this.alarm();
