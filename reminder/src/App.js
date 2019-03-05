@@ -16,7 +16,8 @@ class App extends Component {
     reminders: [
       {
         memo: "Turn in attendance!",
-        time: "17:52:30"
+        date: "",
+        time: ""
       }
     ]
   };
