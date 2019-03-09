@@ -12,7 +12,7 @@ const StyledReminder = styled.div`
 
 
 const StyledReminderText = styled.div`
-  font-size: 4rem;
+  font-size: 3rem;
   grid-column: 2 / 3;
   border-bottom: 1px dashed black;
 `;

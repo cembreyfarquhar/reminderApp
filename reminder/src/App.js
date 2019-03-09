@@ -8,19 +8,24 @@ import AddReminderForm from "./components/home-screen/reminders/forms/AddReminde
 const StyledApp = styled.div`
   box-sizing: border-box;
   height: 100vh;
-  font-size: 10px;
+  font-size: 1rem;
 `;
 
 class App extends Component {
-  state = {
-    reminders: [
-      {
-        memo: "Turn in attendance!",
-        date: "",
-        time: ""
-      }
-    ]
-  };
+  constructor() {
+    super();
+    this.currentTime = 0;
+    this.state = {
+      reminders: [
+        {
+          memo: "Turn in attendance!",
+          date: "",
+          time: "",
+          alarmTimes: [10, 15, 25]
+        }
+      ]
+    };
+  }
 
   submitReminder = reminder => {
     this.setState(prevState => ({
@@ -28,38 +33,26 @@ class App extends Component {
     }));
   };
 
-  // play = () => {
-  //   const sound = new Audio("http://streaming.tdiradio.com:8000/house.mp3");
-  //   sound.play();
-  //   alert(this.state.reminders[0].memo);
-  //   sound.pause();
-  //   sound.currentTime= 0;
-  // };
-
-  // alarm = () => {
-  //   setInterval(() => {
-  //     const date =
-  //       new Date().getHours().toString() +
-  //       ":" +
-  //       new Date().getMinutes().toString() +
-  //       ":" +
-  //       new Date().getSeconds().toString();
-  //     date === this.state.reminders[0].time ? this.play() : console.log(date);
-  //   }, 1000);
-  // };
-
   // START HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   listenForReminders = () => {
-    const triggeredEvent = this.state.reminders.filter(reminder => {
-      return reminder.time === 2;
-    })
-  }
+    // const currentTime = Date.now();
+    this.currentTime++;
+    console.log(this.currentTime);
+    const readyReminders = this.state.reminders.filter(reminder => {
+      const check = reminder.alarmTimes.map(time => {
+        return time < this.currentTime + 2 && time > this.currentTime - 2;
+      });
+      return check.includes(true);
+    });
+
+    readyReminders.length > 0 ? console.log(JSON.stringify(readyReminders)) : console.log("no reminders");
+
+    setTimeout(this.listenForReminders, 3000);
+  };
 
   // On mounting, listens for reminders every minute
   componentDidMount() {
-    setInterval(() => {
-      this.listenForReminders();
-    }, 60000);
+    this.listenForReminders();
   }
 
   render() {
@@ -68,7 +61,7 @@ class App extends Component {
       <StyledApp>
         <Route
           exact
-          path="/" 
+          path="/"
           render={props => (
             <HomePage {...props} reminders={this.state.reminders} />
           )}
