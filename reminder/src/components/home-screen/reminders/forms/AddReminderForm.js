@@ -6,7 +6,7 @@ const StyledForm = styled.form`
   width: 100vw;
   height: 100vh;
   grid-template-columns: 15% 32.5% 32.5% 20%;
-  grid-template-rows: 1fr 0.25fr .5fr 0.25fr 5fr 0.25fr 1.5fr 0.25fr 1.5fr 1fr;
+  grid-template-rows: 1fr 0.25fr 0.5fr 0.25fr 5fr 0.25fr 1.5fr 0.25fr 1.5fr 1fr;
   font-size: 1.4rem;
   h1 {
     grid-column: 2 / 4;
@@ -55,7 +55,7 @@ const StyledForm = styled.form`
   input[type="time"] {
     width: 35%;
     height: 35%;
-    opacity: 0;
+    opacity: 1;
   }
   input[type="date"] {
     grid-column: 2 / 3;
@@ -76,7 +76,8 @@ class AddReminderForm extends Component {
         date: "",
         time: "",
         createdAt: Date.now(),
-        repeating: false
+        recurringFreq: 0,
+        alarmTimes: []
       }
     };
   }
@@ -84,7 +85,9 @@ class AddReminderForm extends Component {
   handleInput = ev => {
     ev.persist();
     this.setState(prevState => ({
+      ...prevState,
       reminder: {
+        ...prevState.reminder,
         [ev.target.name]: ev.target.value
       }
     }));
@@ -106,12 +109,17 @@ class AddReminderForm extends Component {
           src="https://cdn3.iconfinder.com/data/icons/pictofoundry-pro-vector-set/512/Calendar-512.png"
           alt="calendar icon"
         />
-        <input type="date" name="date" min="2019-03-04" />
+        <input
+          type="date"
+          name="date"
+          min="2019-03-04"
+          onChange={this.handleInput}
+        />
         <img
           src="https://www.fjordsafari.com/wp-content/uploads/2016/11/round-clock-icon-86811.png"
           alt="clock icon"
         />
-        <input type="time" name="time" />
+        <input type="time" name="time" onChange={this.handleInput} />
         <span>Memo</span>
         <textarea
           type="text"
@@ -119,8 +127,13 @@ class AddReminderForm extends Component {
           name="memo"
           value={this.state.reminder.memo}
         />
-        <span>Recurring?</span>
-        <input type="checkbox"/>
+        <span>Repeat Every: </span>
+        <select name="recurringFreq" value={this.state.recurringFreq} onChange={this.handleInput}>
+          <option value="0">Never</option>
+          <option value="36000000">Hour</option>
+          <option value="28800000">3 Hours</option>
+          <option value="86400000">Day</option>
+        </select>
       </StyledForm>
     );
   }

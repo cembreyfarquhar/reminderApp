@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Route, withRouter } from "react-router-dom";
+import { Route } from "react-router-dom";
 import styled from "styled-components";
 import HomePage from "./components/home-screen/HomePage.js";
 import AddReminderForm from "./components/home-screen/reminders/forms/AddReminderForm.js";
@@ -21,37 +21,85 @@ class App extends Component {
           memo: "Turn in attendance!",
           date: "",
           time: "",
-          alarmTimes: [10, 15, 25]
+          recurring: true,
+          recurringFreq: 86400000,
+          alarmTimes: [123123, 1231231]
         }
       ]
     };
   }
 
   submitReminder = reminder => {
+    const firstOccurence = new Date(
+      `${reminder.date} ${reminder.time}`
+    ).getTime();
+    reminder.alarmTimes.push(firstOccurence);
+    reminder.recurringFreq = parseInt(reminder.recurringFreq);
+    reminder.recurringFreq > 0
+      ? reminder.alarmTimes.push(firstOccurence + reminder.recurringFreq)
+      : (reminder.recurringFreq = 0);
+
     this.setState(prevState => ({
       reminders: [...prevState.reminders, reminder]
     }));
   };
 
-  // START HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // function runs when a reminder goes off
+  handleReminderAlarm = reminder => {
+    alert(reminder.memo);
+    reminder.alarmTimes.shift();
+    if (reminder.recurringFreq > 0) {
+      this.setState(prevState => ({
+        ...prevState,
+        reminders: prevState.reminders.filter(
+          rem => rem.createdAt !== reminder.createdAt
+        )
+      }));
+      this.setState(prevState => ({
+        ...prevState,
+        reminders: [
+          ...prevState.reminders,
+          {
+            ...reminder,
+            alarmTimes: [
+              reminder.alarmTimes,
+              Date.now() + reminder.recurringFreq
+            ]
+          }
+        ]
+      }));
+    }
+
+    // remove reminders with no alarmtimes
+    this.setState(prevState => ({
+      ...prevState,
+      reminders: prevState.reminders.filter(rem => {
+        return rem.alarmTimes.length > 0;
+      })
+    }));
+  };
+
   listenForReminders = () => {
-    // const currentTime = Date.now();
-    this.currentTime++;
-    console.log(this.currentTime);
+    const currentTime = Date.now();
+    console.log(currentTime);
     const readyReminders = this.state.reminders.filter(reminder => {
       const check = reminder.alarmTimes.map(time => {
-        return time < this.currentTime + 2 && time > this.currentTime - 2;
+        return time < currentTime + 30000 && time > currentTime - 30000;
       });
       return check.includes(true);
     });
 
-    readyReminders.length > 0 ? console.log(JSON.stringify(readyReminders)) : console.log("no reminders");
+    readyReminders.length > 0
+      ? readyReminders.forEach(this.handleReminderAlarm)
+      : console.log("no reminders");
 
-    setTimeout(this.listenForReminders, 3000);
+    // restarts function every minute
+    setTimeout(this.listenForReminders, 60000);
   };
 
   // On mounting, listens for reminders every minute
   componentDidMount() {
+    // initially runs function which then loops on a setTimeout
     this.listenForReminders();
   }
 
